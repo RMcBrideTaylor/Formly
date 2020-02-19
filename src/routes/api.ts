@@ -1,17 +1,21 @@
 import express from "express";
-import authRoutes from "./groups/auth"
 const router = express.Router();
 
-// Auth routes
-router.use('/auth', authRoutes)
+// Controllers
+import auth_controller from '../controllers/auth'
+import user_controller from '../controllers/user'
 
+// Auth routes
+router.use('/auth', auth_controller)
 
 // User Resource Routes
-
+router.use('/user', user_controller)
 
 // Form Resource Routes
+router.use('/form', form_controller)
 
-
+// Submission Resource Routes
+router.use('/submission', submission_controller)
 
 
 
