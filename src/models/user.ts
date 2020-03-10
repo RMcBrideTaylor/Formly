@@ -1,4 +1,4 @@
-import {Entity, PrimaryGeneratedColumn, Column, ManyToOne, BaseEntity} from "typeorm";
+import {Entity, PrimaryGeneratedColumn, Column, ManyToOne, BaseEntity, Index} from "typeorm";
 import {Account} from "./account";
 import * as bcrypt from 'bcrypt';
 
@@ -7,6 +7,7 @@ export class User extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
+    @Index({ unique: true })
     @Column()
     username : string;
 
@@ -24,11 +25,6 @@ export class User extends BaseEntity {
 
     @ManyToOne(type => Account, account => account.users)
     account: Account;
-
-
-    private async hashPassword() {
-      this.password = await bcrypt.hash(this.password, 10);
-    }
 
     async validPassword(password : string) {
       return await bcrypt.compare(password, this.password);

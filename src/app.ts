@@ -2,8 +2,7 @@ import { Application } from "express";
 import express from "express";
 import apiRoutes from "./routes/api";
 import passport from './config/passport';
-import { Connection, ConnectionOptions, createConnection } from "typeorm";
-import * as config from "./server.json"; // @TODO - This doesn't work
+import { Connection, ConnectionOptions, DatabaseType, createConnection } from "typeorm";
 
 export class App {
   port: number;
@@ -12,7 +11,9 @@ export class App {
   cache: Connection;
 
   constructor() {
-    this.port = config.port;
+    require('dotenv').config()
+
+    this.port = Number(process.env.APP_PORT);
     this.app = express();
     this.init();
   }
@@ -24,16 +25,18 @@ export class App {
 
   async start() {
     // Start the app service listening on the configured port
-    // this.repository = await createConnection(config.db);
+
+    const type : any = String(process.env.DB_TYPE) || 'mongodb'
+
     this.repository = await createConnection({
-        "type": "mysql",
-        "host": "localhost",
-        "port": 32769,
-        "username": "root",
-        "password": "jooshu7eeshaich5NimeesheiTheip6g",
-        "database": "formly",
-        "synchronize": true,
-        "logging": false,
+        "type": type,
+        "host": process.env.DB_HOST || 'localhost',
+        "port": Number(process.env.DB_PORT) || 3306,
+        "username": process.env.DB_USERNAME || 'root',
+        "password": process.env.DB_PASSWORD || 'root',
+        "database": process.env.DB_DATABASE || 'formly',
+        "synchronize": Boolean(process.env.DB_SYNC) || true,
+        "logging": Boolean(process.env.DB_LOGGING) || false,
         "entities": [
            "dist/models/**/*.js"
         ],
@@ -57,6 +60,7 @@ export class App {
   middleware() {
     // Load any global middleware
     this.app.use(passport.initialize());
+    this.app.use(express.json())
   }
 
   routes() {

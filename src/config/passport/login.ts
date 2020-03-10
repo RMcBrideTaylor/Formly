@@ -4,7 +4,7 @@ import { User } from '../../models/user';
 const strategy = new LocalStrategy(
   async (username, password, done) => {
     try {
-      const user = await User.findOne({ username })
+      const user = await User.findOne({ username }, {  relations: ["account"] })
 
       if( !user ) { return done(null, false, { message: 'User not found.' }) }
 
