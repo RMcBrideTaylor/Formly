@@ -1,8 +1,10 @@
-import { User } from "../models/user";
-import express from "express";
-const router = express.Router();
+import express from 'express'
+const router = express.Router()
+
+import { User } from '../models/user'
 
 
+// GET user information
 router.get('/:userId', async (req, res) => {
   User.findOne({id: Number(req.params.userId) })
   .then( (user) => {
@@ -18,6 +20,7 @@ router.get('/:userId', async (req, res) => {
 
 })
 
+// UPDATE user information
 router.post('/update/:userId', (req, res) => {
   const {
     userId
@@ -33,7 +36,7 @@ router.post('/update/:userId', (req, res) => {
     res.status(400).send('All properties must be defined in update.')
   }
 
-  User.findOne({id: Number(req.params.userId) })
+  User.findOne({ id: Number(req.params.userId) })
   .then( (user) => {
 
     user.firstName = firstName
@@ -41,6 +44,9 @@ router.post('/update/:userId', (req, res) => {
     user.email = email
 
     user.save()
+
+    // Remove hashed output from the return
+    delete user.password
 
     res.json(user)
   })
@@ -50,6 +56,7 @@ router.post('/update/:userId', (req, res) => {
 
 })
 
+// DELETE existing user
 router.post('/delete/:userId', (req, res) => {
   const {
     userId

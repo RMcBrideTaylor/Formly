@@ -1,8 +1,9 @@
-import { Group } from "../models/group"
-import { User } from "../models/user"
-import { Account } from "../models/account"
-import express from "express";
-const router = express.Router();
+import express from 'express'
+const router = express.Router()
+
+import { Group } from '../models/group'
+import { User } from '../models/user'
+import { Account } from '../models/account'
 
 
 // Get a listing of all groups

@@ -1,7 +1,7 @@
-import express from "express";
-const router = express.Router();
+import express from 'express'
+const router = express.Router()
 
-import passport from '../config/passport';
+import passport from '../config/passport'
 
 // Controllers
 import auth_controller from '../controllers/auth'
@@ -25,11 +25,5 @@ router.use('/group', passport.authenticate('token', { session: false }), group_c
 // Submission Resource Routes
 // router.use('/submission', submission_controller)
 
-
-
-
-router.get('/', (req, res) => {
-  res.json('home')
-})
 
 export default router

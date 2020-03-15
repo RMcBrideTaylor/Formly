@@ -1,21 +1,21 @@
-import {Entity, PrimaryGeneratedColumn, Column, ManyToOne, BaseEntity} from "typeorm";
-import * as bcrypt from 'bcrypt';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, BaseEntity } from 'typeorm'
+import * as bcrypt from 'bcrypt'
 
 @Entity()
 export class Client extends BaseEntity {
     @PrimaryGeneratedColumn()
-    id: number;
+    id: number
 
     @Column()
-    name : string;
+    name : string
 
     @Column()
-    secret: string;
+    secret: string
 
     @Column()
-    description: string;
+    description: string
 
     @Column()
-    callback: string;
+    callback: string
 
 }

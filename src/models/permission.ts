@@ -1,13 +1,6 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToOne,
-  BaseEntity,
-  Index
-} from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, BaseEntity, Index } from 'typeorm'
 
-import { Group } from "./group";
+import { Group } from './group'
 
 @Entity()
 export class Permission extends BaseEntity {

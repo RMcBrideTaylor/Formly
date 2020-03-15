@@ -1,5 +1,5 @@
-import { Strategy as LocalStrategy } from 'passport-local';
-import { User } from '../../models/user';
+import { Strategy as LocalStrategy } from 'passport-local'
+import { User } from '../../models/user'
 
 const strategy = new LocalStrategy(
   async (username, password, done) => {

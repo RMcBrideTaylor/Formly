@@ -1,18 +1,18 @@
-import { User } from "../models/user"
-import { Account } from "../models/account"
-import { Cache } from "../models/cache"
-
-import express from "express";
+import express from 'express'
 import {
   body,
   sanitizeBody,
   check,
   validationResult
-}  from 'express-validator';
-import passport from '../config/passport';
-const router = express.Router();
-import crypto from 'crypto';
-import * as bcrypt from 'bcrypt';
+}  from 'express-validator'
+import passport from '../config/passport'
+const router = express.Router()
+import crypto from 'crypto'
+import * as bcrypt from 'bcrypt'
+
+import { User } from '../models/user'
+import { Account } from '../models/account'
+import { Cache } from '../models/cache'
 
 // Login
 router.post('/login', passport.authenticate('login', { session: false }), (req, res, next) => {
@@ -41,7 +41,7 @@ router.post('/login', passport.authenticate('login', { session: false }), (req, 
       token
     })
 
-  });
+  })
 
 
 })
@@ -64,15 +64,15 @@ async (req : any, res : any) => {
     verifyPassword
   } = req.body
 
-  const errors = validationResult(req);
+  const errors = validationResult(req)
 
   // Check that password and verification match
   if( password !== verifyPassword) {
-    return res.status(422).json({ errors: ['Password and verification must match'] });
+    return res.status(422).json({ errors: ['Password and verification must match'] })
   }
 
   if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.array() });
+    return res.status(422).json({ errors: errors.array() })
   }
 
   const account = new Account()

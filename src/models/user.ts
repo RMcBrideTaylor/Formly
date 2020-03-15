@@ -1,32 +1,32 @@
-import {Entity, PrimaryGeneratedColumn, Column, ManyToOne, BaseEntity, Index} from "typeorm";
-import {Account} from "./account";
-import * as bcrypt from 'bcrypt';
+import {Entity, PrimaryGeneratedColumn, Column, ManyToOne, BaseEntity, Index} from 'typeorm'
+import {Account} from './account'
+import * as bcrypt from 'bcrypt'
 
 @Entity()
 export class User extends BaseEntity {
     @PrimaryGeneratedColumn()
-    id: number;
+    id: number
 
     @Index({ unique: true })
     @Column()
-    username : string;
+    username : string
 
     @Column()
-    email: string;
+    email: string
 
     @Column()
-    firstName: string;
+    firstName: string
 
     @Column()
-    lastName: string;
+    lastName: string
 
     @Column()
-    password: string;
+    password: string
 
     @ManyToOne(type => Account, account => account.users)
-    account: Account;
+    account: Account
 
     validPassword(password : string) {
-      return bcrypt.compareSync(password, this.password);
+      return bcrypt.compareSync(password, this.password)
     }
 }

@@ -1,20 +1,20 @@
-import {Entity, PrimaryGeneratedColumn, Column, ManyToOne, BaseEntity} from "typeorm";
-import {Account} from "./account";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, BaseEntity } from 'typeorm'
+import {Account} from './account'
 
 @Entity()
 export class Cache extends BaseEntity {
     @PrimaryGeneratedColumn()
-    id: number;
+    id: number
 
     @Column()
-    key : string;
+    key : string
 
     @Column()
-    value: string;
+    value: string
 
     @Column()
-    expires: Date;
+    expires: Date
 
     @ManyToOne(type => Account, account => account.users)
-    account: Account;
+    account: Account
 }

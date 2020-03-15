@@ -1,11 +1,11 @@
-import { Application } from "express"
-import { Connection, ConnectionOptions, DatabaseType, createConnection } from "typeorm"
+import { Application } from 'express'
+import { Connection, ConnectionOptions, DatabaseType, createConnection } from 'typeorm'
 import { Client } from './models/client'
 
 import crypto from 'crypto'
-import express from "express";
+import express from 'express'
 import bearerToken from 'express-bearer-token'
-import apiRoutes from "./routes/api"
+import apiRoutes from './routes/api'
 import passport from './config/passport'
 
 
@@ -59,14 +59,14 @@ export class App {
         }
     }
 
-    this.port = Number(process.env.APP_PORT || 3001);
-    this.app = express();
-    this.init();
+    this.port = Number(process.env.APP_PORT || 3001)
+    this.app = express()
+    this.init()
   }
 
   init() {
-    this.middleware();
-    this.routes();
+    this.middleware()
+    this.routes()
   }
 
   async start() {
@@ -86,12 +86,12 @@ export class App {
 
   middleware() {
     // Load any global middleware
-    this.app.use(passport.initialize());
+    this.app.use(passport.initialize())
     this.app.use(express.json())
     this.app.use(bearerToken())
   }
 
   routes() {
-    this.app.use('/', apiRoutes);
+    this.app.use('/', apiRoutes)
   }
 }
