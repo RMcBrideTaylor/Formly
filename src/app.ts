@@ -4,6 +4,7 @@ import { Client } from './models/client'
 
 import crypto from 'crypto'
 import express from 'express'
+import morgan from 'morgan'
 import bearerToken from 'express-bearer-token'
 import apiRoutes from './routes/api'
 import passport from './config/passport'
@@ -89,6 +90,11 @@ export class App {
     this.app.use(passport.initialize())
     this.app.use(express.json())
     this.app.use(bearerToken())
+
+    // Only log HTTP on non test runs
+    if(!process.env.APP_ENV || process.env.APP_ENV !== 'test'){
+      this.app.use(morgan('combined'))
+    }
   }
 
   routes() {
