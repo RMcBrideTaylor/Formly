@@ -30,8 +30,8 @@ Building and running the project
 $ npm install
 
 # serve the program for development at localhost:8080
-$ npm run dev
+$ npm start
 
-# run tests 
-$ npm run test
+# run tests
+$ npm test
 ```
