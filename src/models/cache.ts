@@ -9,7 +9,7 @@ export class Cache extends BaseEntity {
     @Column()
     key : string;
 
-    @Column('json')
+    @Column()
     value: string;
 
     @Column()

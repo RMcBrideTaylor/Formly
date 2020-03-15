@@ -2,11 +2,10 @@ import {Entity, PrimaryGeneratedColumn, Column, ManyToOne, BaseEntity} from "typ
 import * as bcrypt from 'bcrypt';
 
 @Entity()
-export class User extends BaseEntity {
+export class Client extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    // @Index({ unique: true })
     @Column()
     name : string;
 
@@ -18,5 +17,5 @@ export class User extends BaseEntity {
 
     @Column()
     callback: string;
-    
+
 }

@@ -1,8 +1,8 @@
 import passport from 'passport';
 import loginStrategy from './passport/login';
-import registerStrategy from './passport/register';
+import tokenStrategy from './passport/token'
 
 passport.use('login', loginStrategy);
-passport.use('register', registerStrategy);
+passport.use('token', tokenStrategy)
 
 export default passport

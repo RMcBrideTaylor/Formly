@@ -1,6 +1,6 @@
 import { App } from "./app";
 
-const app = new App();
-app.start();
+const express = new App()
+const server = express.start()
 
-export default app
+export { express, server }

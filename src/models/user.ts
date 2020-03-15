@@ -26,7 +26,7 @@ export class User extends BaseEntity {
     @ManyToOne(type => Account, account => account.users)
     account: Account;
 
-    async validPassword(password : string) {
-      return await bcrypt.compare(password, this.password);
+    validPassword(password : string) {
+      return bcrypt.compareSync(password, this.password);
     }
 }

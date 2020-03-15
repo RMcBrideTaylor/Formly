@@ -1,6 +1,7 @@
-import { User } from "../models/user";
-import { Account } from "../models/account";
-import { Cache } from "../models/cache";
+import { User } from "../models/user"
+import { Account } from "../models/account"
+import { Cache } from "../models/cache"
+
 import express from "express";
 import {
   body,
@@ -15,6 +16,7 @@ import * as bcrypt from 'bcrypt';
 
 // Login
 router.post('/login', passport.authenticate('login', { session: false }), (req, res, next) => {
+
   // Generate token
   crypto.randomBytes(32, async (err, buffer) => {
     if (err) throw err
@@ -45,9 +47,22 @@ router.post('/login', passport.authenticate('login', { session: false }), (req, 
 })
 
 // Register
-router.post('/register', async (req, res, next) => {
+router.post('/register',
+  [
+    body('email').isEmail(),
+    body('password').isLength({ min: 7 }),
+    body('verifyPassword').not().isEmpty()
+  ],
+async (req : any, res : any) => {
 
-  const { username, email, firstName, lastName, password, verifyPassword } = req.body
+  const {
+    username,
+    email,
+    firstName,
+    lastName,
+    password,
+    verifyPassword
+  } = req.body
 
   const errors = validationResult(req);
 
@@ -69,10 +84,12 @@ router.post('/register', async (req, res, next) => {
   user.password = await bcrypt.hash(password, 10)
   user.account = account
 
-  await account.save();
-  await user.save();
+  await account.save()
+  await user.save()
 
-  return res.status(200).json({ message: "success" })
+  delete(user.password)
+
+  return res.status(200).json(user)
 })
 
 export default router

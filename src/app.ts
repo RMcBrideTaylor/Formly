@@ -1,19 +1,65 @@
-import { Application } from "express";
+import { Application } from "express"
+import { Connection, ConnectionOptions, DatabaseType, createConnection } from "typeorm"
+import { Client } from './models/client'
+
+import crypto from 'crypto'
 import express from "express";
-import apiRoutes from "./routes/api";
-import passport from './config/passport';
-import { Connection, ConnectionOptions, DatabaseType, createConnection } from "typeorm";
+import bearerToken from 'express-bearer-token'
+import apiRoutes from "./routes/api"
+import passport from './config/passport'
+
 
 export class App {
-  port: number;
-  app: Application;
-  repository?: Connection;
-  cache: Connection;
+  port: number
+  app: Application
+  server? : any // @TODO - Explicity require server instance
+  repository?: Connection
+  cache: Connection
+  dbConfig : any
 
   constructor() {
-    require('dotenv').config()
+    if (process.env.APP_ENV && process.env.APP_ENV === 'test' ) {
+      // If this is test mode
+      require('dotenv').config({ path: '.env.test' })
+      this.dbConfig = {
+        "type" : "sqlite",
+        "database" : ":memory:",
+        "dropSchema" : true,
+        "synchronize": true,
+        "entities": [
+           "dist/models/**/*.js"
+        ],
+        "migrations": [
+           "dist/migrations/**/*.js"
+        ]
+      }
 
-    this.port = Number(process.env.APP_PORT);
+    } else {
+      require('dotenv').config({ path: '.env' })
+
+      const type : any = String(process.env.DB_TYPE) || 'mongodb'
+      this.dbConfig = {
+          "type": type,
+          "host": process.env.DB_HOST || 'localhost',
+          "port": Number(process.env.DB_PORT) || 3306,
+          "username": process.env.DB_USERNAME || 'root',
+          "password": process.env.DB_PASSWORD || 'root',
+          "database": process.env.DB_DATABASE || 'formly',
+          "synchronize": Boolean(process.env.DB_SYNC) || true,
+          "logging": Boolean(process.env.DB_LOGGING) || false,
+          "entities": [
+             "dist/models/**/*.js"
+          ],
+          "migrations": [
+             "dist/migrations/**/*.js"
+          ],
+          "cli": {
+               "migrationsDir": "src/migrations"
+           }
+        }
+    }
+
+    this.port = Number(process.env.APP_PORT || 3001);
     this.app = express();
     this.init();
   }
@@ -24,36 +70,17 @@ export class App {
   }
 
   async start() {
-    // Start the app service listening on the configured port
 
-    const type : any = String(process.env.DB_TYPE) || 'mongodb'
+    // Set up database connection
+    this.repository = await createConnection(this.dbConfig)
 
-    this.repository = await createConnection({
-        "type": type,
-        "host": process.env.DB_HOST || 'localhost',
-        "port": Number(process.env.DB_PORT) || 3306,
-        "username": process.env.DB_USERNAME || 'root',
-        "password": process.env.DB_PASSWORD || 'root',
-        "database": process.env.DB_DATABASE || 'formly',
-        "synchronize": Boolean(process.env.DB_SYNC) || true,
-        "logging": Boolean(process.env.DB_LOGGING) || false,
-        "entities": [
-           "dist/models/**/*.js"
-        ],
-        "migrations": [
-           "dist/migrations/**/*.js"
-        ],
-        "cli": {
-             "migrationsDir": "src/migrations"
-         }
-      });
+    // @TODO refactor this to use host so you can run it behind a proxy
+    this.server = this.app.listen(this.port)
 
-    // @TODO refactor this to use host to you can run it behind a proxy
-    const server = this.app.listen(this.port, () => {
-      // @TODO - Remove console.log in favor of proper logging
-      // tslint:disable-next-line:no-console
-      console.log( `Server listening on http://localhost:${ this.port }` );
-    })
+    // tslint:disable-next-line:no-console
+    console.log(`Server started at https://localhost:${ this.port }`)
+
+    return this.server
 
   }
 
@@ -61,6 +88,7 @@ export class App {
     // Load any global middleware
     this.app.use(passport.initialize());
     this.app.use(express.json())
+    this.app.use(bearerToken())
   }
 
   routes() {
