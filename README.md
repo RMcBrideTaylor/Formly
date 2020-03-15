@@ -29,7 +29,7 @@ Building and running the project
 # install dependencies
 $ npm install
 
-# serve the program for development at localhost:8080
+# serve the program for development at localhost:3001
 $ npm start
 
 # run tests
