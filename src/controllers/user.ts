@@ -3,7 +3,6 @@ const router = express.Router()
 
 import { User } from '../models/user'
 
-
 // GET user information
 router.get('/:userId', async (req, res) => {
   User.findOne({id: Number(req.params.userId) })

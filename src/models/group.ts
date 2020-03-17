@@ -21,7 +21,7 @@ export class Group extends BaseEntity {
   name: string
 
   @ManyToMany( type => Account, account => account.groups )
-  @JoinTable()
+  @JoinTable({name: 'group_memberships'})
   members: Account[]
 
   @OneToMany( type => Permission, permission => permission.group )
